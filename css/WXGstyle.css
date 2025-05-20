@@ -1,0 +1,364 @@
+@import url("https://fonts.googleapis.com/css?family=Heebo:800");
+@font-face {
+  font-family: "FZZ";
+  src: url("../font/FZZhangMLBKSJW.TTF");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.parent {
+  height: 66.67vh;
+  aspect-ratio: 16/9;
+  width: auto;
+  max-width: 90vw;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto auto;
+  overflow: hidden;
+  position: absolute;
+  border-radius: 16px;
+  -webkit-box-shadow: 0 0 88px 5px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0 0 88px 5px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 88px 5px rgba(0, 0, 0, 0.75);
+}
+
+svg {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+button {
+  position: absolute;
+  z-index: 50;
+  width: 40px;
+  overflow: hidden;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-box-shadow: 0 0 88px 5px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0 0 88px 5px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 88px 5px rgba(0, 0, 0, 0.75);
+}
+
+button:focus {
+  outline-width: 0;
+}
+
+/* 波纹 */
+circle {
+  stroke: #ffffff;
+  fill: none;
+  transition: 0.3s;
+}
+
+#svg1,
+#svg2 {
+  pointer-events: none; /* 允许鼠标事件穿透 */
+}
+
+#svg1 circle {
+  transition-timing-function: linear;
+}
+
+#svg2 circle {
+  transition-timing-function: linear;
+}
+
+#Capa_1 {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  transform: translate(-7px, -8px);
+}
+
+#Capa_2 {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  transform: translate(-9px, -8px);
+}
+
+.right {
+  margin-left: calc(33.33% - 40px - 0.5%);
+  margin-top: calc(33.33vh - 20px);
+  border: 1px solid #fff;
+  background-color: transparent;
+  transition: 0.5s;
+}
+
+.right:hover {
+  background-color: #fff;
+}
+
+.left {
+  margin-left: 0.5%;
+  margin-top: calc(33.33vh - 20px);
+  border: 1px solid #fff;
+  background-color: transparent;
+  transition: 0.5s;
+}
+
+.left:hover {
+  background-color: #fff;
+}
+
+.circle1 {
+  transition-delay: 0.05s;
+}
+
+.circle2 {
+  transition-delay: 0.1s;
+}
+
+.circle3 {
+  transition-delay: 0.15s;
+}
+
+.circle4 {
+  transition-delay: 0.2s;
+}
+
+.circle5 {
+  transition-delay: 0.25s;
+}
+
+.circle6 {
+  transition-delay: 0.3s;
+}
+
+.circle7 {
+  transition-delay: 0.35s;
+}
+
+.circle8 {
+  transition-delay: 0.4s;
+}
+
+.circle9 {
+  transition-delay: 0.45s;
+}
+
+.circle10 {
+  transition-delay: 0.5s;
+}
+
+.circle11 {
+  transition-delay: 0.55s;
+}
+
+.circle12 {
+  transition-delay: 0.6s;
+}
+
+.circle13 {
+  transition-delay: 0.65s;
+}
+
+.circle14 {
+  transition-delay: 0.7s;
+}
+
+.circle15 {
+  transition-delay: 0.75s;
+}
+
+.circle16 {
+  transition-delay: 0.05s;
+}
+
+.circle17 {
+  transition-delay: 0.1s;
+}
+
+.circle18 {
+  transition-delay: 0.15s;
+}
+
+.circle19 {
+  transition-delay: 0.2s;
+}
+
+.circle20 {
+  transition-delay: 0.25s;
+}
+
+.circle21 {
+  transition-delay: 0.3s;
+}
+
+.circle22 {
+  transition-delay: 0.35s;
+}
+
+.circle23 {
+  transition-delay: 0.4s;
+}
+
+.circle24 {
+  transition-delay: 0.45s;
+}
+
+.circle25 {
+  transition-delay: 0.5s;
+}
+
+.circle26 {
+  transition-delay: 0.55s;
+}
+
+.circle27 {
+  transition-delay: 0.6s;
+}
+
+.circle28 {
+  transition-delay: 0.65s;
+}
+
+.circle29 {
+  transition-delay: 0.7s;
+}
+
+.circle30 {
+  transition-delay: 0.75s;
+}
+
+.slide1 {
+  background-image: url("../images/wanxiangge/1.png");
+}
+
+.slide2 {
+  background-image: url("../images/wanxiangge/2.png");
+}
+
+.slide3 {
+  background-image: url("../images/wanxiangge/3.png");
+}
+
+.slider {
+  position: absolute;
+  /* 宽度=图片张数n*100% */
+  width: 300%;
+  height: 100%;
+  background: #000;
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.slide1,
+.slide2,
+.slide3 {
+  position: absolute;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column; /* 竖向排列 */
+  justify-content: center; /* 垂直居中 */
+  align-items: center; /* 水平居中 */
+  /* 100%除以图片张数n */
+  width: 33.33%;
+  height: 100%;
+  z-index: 10;
+  transition: 1.4s;
+}
+.text11 {
+  color: #000000;
+  font-size: 80px;
+  padding-top: 0;
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: center;
+  font-weight: 1500;
+  letter-spacing: 30px;
+  text-indent: 30px;
+  /* text-align: center; */
+  font-family: "FZZ", sans-serif;
+  text-align: center;
+}
+
+.tran {
+  transform: scale(1.3);
+}
+
+.up1 {
+  z-index: 20;
+}
+
+.up2 {
+  z-index: 40;
+}
+
+.steap {
+  stroke-width: 0;
+}
+
+.streak {
+  stroke-width: 82px;
+}
+
+@media (max-width: 700px) {
+  .parent {
+    margin-left: 1%;
+  }
+}
+
+/* 视频响应 */
+/* 视频响应模块样式 */
+.video-trailer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.95);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: auto; /* 允许鼠标事件穿透 */
+}
+
+.video-trailer.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.video-trailer video {
+  position: relative;
+  max-width: 900px;
+  outline: none;
+  max-height: 90vh;
+}
+
+.video-close-btn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  cursor: pointer;
+  filter: invert(1);
+  max-width: 32px;
+  z-index: 10001;
+}
+
+.video-trigger-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 100px); /* 留出底部按钮空间 */
+  cursor: pointer;
+  z-index: 30; /* 高于slide但低于按钮 */
+}

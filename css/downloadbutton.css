@@ -1,0 +1,130 @@
+.download {
+  position: relative;
+  border: none;
+  outline: none;
+  z-index: 1000;
+  width: 180px;
+  height: 50px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+  font-size: 25px;
+  letter-spacing: 0.5rem;
+  text-indent: 0.5rem;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.5s ease;
+}
+
+.download1 {
+  background-color: rgb(223, 152, 81);
+  box-shadow: 0 8px 28px rgb(217, 119, 80);
+}
+
+.download2 {
+  background-color: rgb(56, 167, 110);
+  box-shadow: 0 8px 28px rgb(30, 118, 55);
+}
+
+.download.active {
+  width: 80px;
+  color: transparent;
+  border-radius: 30px !important;
+  padding: 0;
+}
+
+.download1 {
+  background-color: rgb(223, 152, 81);
+  box-shadow: 0 8px 28px rgb(217, 119, 80);
+}
+
+.download1.active {
+  background-color: rgb(223, 152, 81) !important; /* 保持原有颜色 */
+}
+
+.download2 {
+  background-color: rgb(56, 167, 110);
+  box-shadow: 0 8px 28px rgb(30, 118, 55);
+}
+
+.download2.active {
+  background-color: rgb(56, 167, 110) !important; /* 保持原有颜色 */
+}
+
+/* button style end */
+
+/* loading style start */
+.loading {
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.download.active .loading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 70%;
+  height: 40%;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  opacity: 1;
+}
+
+.download.active .loading div {
+  width: 0.3rem;
+  height: 0.3rem;
+  border-radius: 30px;
+  background-color: rgb(255, 255, 255);
+
+  animation: 0.9s loading ease-in-out infinite alternate;
+}
+
+@keyframes loading {
+  to {
+    transform: translate(0, -1rem);
+  }
+}
+
+.download.active .loading div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.download.active .loading div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.download.verity .loading {
+  opacity: 0;
+}
+/* loading style end */
+
+/* checkmark style start */
+.checkmark {
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  transform: translate(-50%, -50%);
+
+  /* 利用stroke的虚线和偏移值达到加载的动画效果 */
+  stroke-dasharray: 36px;
+  stroke-dashoffset: 36px;
+
+  width: 30px;
+  height: 30px;
+}
+
+.download.verity .checkmark {
+  animation: 0.6s show forwards;
+  animation-delay: 0.4s;
+}
+
+@keyframes show {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+/* checkmark style end */
