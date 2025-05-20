@@ -31,7 +31,13 @@ $(document).ready(function () {
       button.addClass("verity");
 
       // 下载第一个压缩包（鹤忆算学）
-      downloadFile("../downloads/MemoryodMath", "鹤忆算学.zip");
+      // downloadFile("../downloads/MemoryodMath", "鹤忆算学.zip");
+
+      // 通过百度网盘
+      window.open(
+        "https://pan.baidu.com/s/1YmtbB2VKVxeirvyM-Bj7og?pwd=1234 提取码: 1234",
+        "_blank"
+      );
 
       setTimeout(() => {
         button.removeClass("active verity");
@@ -52,7 +58,13 @@ $(document).ready(function () {
       button.addClass("verity");
 
       // 下载第二个压缩包（梦百草）
-      downloadFile("../downloads/DreamofHerbs", "梦百草.zip");
+      // downloadFile("../downloads/DreamofHerbs", "梦百草.zip");
+
+      // 通过百度网盘
+      window.open(
+        "https://pan.baidu.com/s/1GTHbm4PUAKiX0fpiRPCj6w?pwd=1234 提取码: 1234",
+        "_blank"
+      );
 
       setTimeout(() => {
         button.removeClass("active verity");
