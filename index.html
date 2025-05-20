@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>墨游&MoGame-首页</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://fonts.googleapis.com/css?family=Montserrat&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/moyoumogame/css/HOMEstyle.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        list-style: none;
+        text-decoration: none;
+      }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        background-image: url("/moyoumogame/images/home/底纹背景\ \(17\).JPG");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* 固定背景图片 */
+      }
+
+      .shell {
+        position: fixed;
+        width: 84px;
+        height: 100%;
+        background: #ffffff88;
+        z-index: 9999;
+        transition: width 0.5s;
+        padding-left: 10px;
+        overflow: hidden;
+      }
+
+      .shell:hover {
+        width: 300px;
+      }
+
+      .imageBox {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+
+      .imageBox img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .shell ul {
+        position: relative;
+        height: 100vh;
+      }
+
+      .shell ul li {
+        position: relative;
+        padding: 5px;
+      }
+
+      .active {
+        /* background: #e4e9f5; */
+        background-image: url("/moyoumogame/images/home/底纹背景\ \(17\).JPG");
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+      }
+
+      .active::before {
+        content: "";
+        position: absolute;
+        top: -30px;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        border-bottom-right-radius: 25px;
+        box-shadow: 5px 5px 0 5px #e4e9f500;
+        background: transparent;
+      }
+
+      .active::after {
+        content: "";
+        position: absolute;
+        bottom: -30px;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        border-top-right-radius: 25px;
+        box-shadow: 5px -5px 0 5px #e4e9f500;
+        background: transparent;
+      }
+
+      #logo {
+        margin: 40px 0 100px 0;
+      }
+
+      .shell ul li a {
+        position: relative;
+        display: flex;
+        white-space: nowrap;
+      }
+
+      .icon1 {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 60px;
+        padding-left: 10px;
+        height: 70px;
+        color: #333;
+        transition: 0.5s;
+        color: rgb(110, 90, 240);
+      }
+
+      .icon1 i {
+        font-size: 30px;
+        z-index: 999;
+      }
+
+      .text {
+        position: relative;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        color: #333;
+        padding-left: 15px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        transition: 0.5s;
+      }
+
+      .shell ul li:hover a .icon1,
+      .shell ul li:hover a .text {
+        color: #ffa117;
+      }
+
+      .active a .icon1::before {
+        content: "";
+        position: absolute;
+        inset: 5px;
+        width: 60px;
+        background: #fff;
+        border-radius: 50%;
+        transition: 0.5s;
+        border: 7px solid rgb(255, 255, 255);
+        box-sizing: border-box;
+      }
+
+      /* 视频背景 */
+      #video-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover; /* 保持视频比例并填满屏幕 */
+        z-index: -1; /* 确保内容在上层 */
+      }
+      /* BGM */
+      audio {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 视频背景 -->
+    <video autoplay muted loop id="video-bg">
+      <source src="/moyoumogame/images/home/HOMEbackg.mp4" type="video/mp4" />
+      <!-- 备用提示 -->
+      您的浏览器不支持HTML5视频。
+    </video>
+    <!-- 背景音乐 -->
+    <audio
+      src="/moyoumogame/images/home/HOMEBGM.MP3"
+      rel="external nofollow"
+      id="aud"
+      autoplay="autoplay"
+      controls="controls"
+      preload="auto"
+      class="audio"
+    ></audio>
+    <div class="shell">
+      <ul class="nav">
+        <li class="active" id="logo">
+          <a href="#">
+            <div class="icon1">
+              <div class="imageBox">
+                <img src="/moyoumogame/images/Logo.png" alt="" />
+              </div>
+            </div>
+            <div class="text">墨游&MoGame</div>
+          </a>
+        </li>
+        <li>
+          <a href="/moyoumogame/index.html">
+            <div class="icon1">
+              <i class="iconfont icon1-cangku"></i>
+            </div>
+            <div class="text">首页</div>
+          </a>
+        </li>
+        <li>
+          <a href="/moyoumogame/wanxiangge.html">
+            <div class="icon1">
+              <i class="iconfont icon1-zhuti_tiaosepan"></i>
+            </div>
+            <div class="text">万象阁</div>
+          </a>
+        </li>
+        <li>
+          <a href="/moyoumogame/baixiaosheng.html">
+            <div class="icon1">
+              <i class="iconfont icon1-tupian"></i>
+            </div>
+            <div class="text">百晓生</div>
+          </a>
+        </li>
+        <li>
+          <a href="/moyoumogame/yijie.html">
+            <div class="icon1">
+              <i class="iconfont icon1-erweima"></i>
+            </div>
+            <div class="text">弈界</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <section
+      id="home"
+      style="
+        justify-content: center;
+        align-items: center;
+        transform: translateX(51vw);
+      "
+    >
+      <div class="app">
+        <div class="cardList">
+          <!-- 左箭头 -->
+          <button class="cardList__btn btn btn--left">
+            <div class="icon">
+              <svg>
+                <use xlink:href="#arrow-left"></use>
+              </svg>
+            </div>
+          </button>
+
+          <!-- 卡片 -->
+          <div class="cards__wrapper">
+            <a href="wanxiangge.html" class="card current--card">
+              <div class="card__image">
+                <img src="/moyoumogame/images/home/1.png" alt="" />
+              </div>
+            </a>
+
+            <a href="baixiaosheng.html" class="card next--card">
+              <div class="card__image">
+                <img src="/moyoumogame/images/home/2.png" alt="" />
+              </div>
+            </a>
+
+            <a href="" class="card previous--card">
+              <div class="card__image">
+                <img src="/moyoumogame/images/home/3.png" alt="" />
+              </div>
+            </a>
+          </div>
+
+          <!-- 右箭头 -->
+          <button class="cardList__btn btn btn--right">
+            <div class="icon">
+              <svg>
+                <use xlink:href="#arrow-right"></use>
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <!-- 文字介绍 -->
+        <div class="infoList">
+          <div class="info__wrapper">
+            <div class="info current--info">
+              <h1 class="text name">万象阁</h1>
+              <h4 class="text location">森罗万象</h4>
+              <p class="text description">梦百草 鹤忆算学 待续......</p>
+            </div>
+
+            <div class="info next--info">
+              <h1 class="text name">百晓生</h1>
+              <h4 class="text location">诸事皆晓</h4>
+              <p class="text description">科普 见闻 趣帖 待续......</p>
+            </div>
+
+            <div class="info previous--info">
+              <h1 class="text name">弈界</h1>
+              <h4 class="text location">乐享百弈</h4>
+              <p class="text description">棋艺 射艺 待续......</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="app__bg">
+          <div class="app__bg__image current--image">
+            <img src="https://source.unsplash.com/Z8dtTatMVMw" alt="" />
+          </div>
+          <div class="app__bg__image next--image">
+            <img src="https://source.unsplash.com/9dmycbFE7mQ" alt="" />
+          </div>
+          <div class="app__bg__image previous--image">
+            <img src="https://source.unsplash.com/m7K4KzL5aQ8" alt="" />
+          </div>
+        </div>
+      </div>
+
+      <div class="loading__wrapper">
+        <div class="loader--text">......</div>
+        <div class="loader">
+          <span></span>
+        </div>
+      </div>
+
+      <svg class="icons" style="display: none">
+        <symbol
+          id="arrow-left"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        >
+          <polyline
+            points="328 112 184 256 328 400"
+            style="
+              fill: none;
+              stroke: #fff;
+              stroke-linecap: round;
+              stroke-linejoin: round;
+              stroke-width: 48px;
+            "
+          />
+        </symbol>
+        <symbol
+          id="arrow-right"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        >
+          <polyline
+            points="184 112 328 256 184 400"
+            style="
+              fill: none;
+              stroke: #fff;
+              stroke-linecap: round;
+              stroke-linejoin: round;
+              stroke-width: 48px;
+            "
+          />
+        </symbol>
+      </svg>
+    </section>
+
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.3/gsap.min.js"
+    ></script>
+    <script type="text/javascript" src="/moyoumogame/js/HOMEscript.js"></script>
+    <script>
+      // 动态计算卡片高度和宽度
+      function setCardSize() {
+        const windowHeight = window.innerHeight;
+        const cardHeight = (2 / 3) * windowHeight;
+        const cardWidth = (cardHeight / 600) * 400; // 保持长宽比例不变
+
+        // 更新 CSS 变量
+        document.documentElement.style.setProperty(
+          "--card-width",
+          `${cardWidth}px`
+        );
+        document.documentElement.style.setProperty(
+          "--card-height",
+          `${cardHeight}px`
+        );
+      }
+
+      // 页面加载时设置卡片大小
+      window.addEventListener("load", setCardSize);
+
+      // 窗口大小改变时重新设置卡片大小
+      window.addEventListener("resize", setCardSize);
+    </script>
+
+    <!-- BGM -->
+    <script type="text/javascript">
+      window.onload = function () {
+        setInterval("toggleSound()", 1);
+      };
+
+      function toggleSound() {
+        var music = document.getElementById("aud");
+        if (music.paused) {
+          music.paused = false;
+          music.play();
+        }
+      }
+    </script>
+  </body>
+</html>
