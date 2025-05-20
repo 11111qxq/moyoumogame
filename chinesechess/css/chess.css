@@ -1,0 +1,74 @@
+@charset "utf-8";
+body {
+  font-size: 12px;
+  line-height: 150%;
+  display: flex; /* 使用 Flexbox 布局 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  min-height: 100vh; /* 设置最小高度为视口高度 */
+  margin: 0; /* 移除默认的边距 */
+  background: url("img/stype_1/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+.box {
+  /* margin: 0 auto;
+  width: 460px; */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+  max-width: 100%;
+  padding: 20px;
+}
+#chess {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+.chess_left {
+  /* float: left; */
+  text-align: center;
+  width: 100%;
+}
+.chess_right {
+  /* float: left; */
+  display: none;
+}
+.move_info {
+  /* float: left; */
+  margin-top: 20px;
+  text-align: center;
+}
+
+.bill_box {
+  height: 320px;
+  width: 80px;
+  overflow: auto;
+}
+.bill_box li {
+  cursor: pointer;
+  text-align: left;
+}
+.bill_box li:hover {
+  cursor: pointer;
+  background: #c6a577;
+}
+.bill_box li:active {
+  cursor: pointer;
+  background: #fff;
+}
+#billList {
+  margin-top: 20px;
+}
+.bn_box {
+  display: none;
+  margin-top: 10px;
+}
+
+/* 确保按钮居中 */
+.bn_box input {
+  margin: 5px;
+}

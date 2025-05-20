@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>墨游&MoGame-弈界：象棋</title>
+    <link href="css/chess.css" rel="stylesheet" type="text/css" />
+    <style>
+      /* 视频背景 */
+      #video-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover; /* 保持视频比例并填满屏幕 */
+        z-index: -1; /* 确保内容在上层 */
+      }
+      /* BGM */
+      audio {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 视频背景 -->
+    <video autoplay muted loop id="video-bg">
+      <source src="img/bg.mp4" type="video/mp4" />
+      <!-- 备用提示 -->
+      您的浏览器不支持HTML5视频。
+    </video>
+    <!-- 背景音乐 -->
+    <audio
+      src="img/BGM1.MP3"
+      rel="external nofollow"
+      id="aud"
+      autoplay="autoplay"
+      controls="controls"
+      preload="auto"
+      class="audio"
+    ></audio>
+    <div class="box" id="box">
+      <div class="chess_left">
+        <canvas id="chess"
+          >对不起，您的浏览器不支持HTML5，请升级浏览器至IE9、firefox或者谷歌浏览器！</canvas
+        >
+        <audio src="audio/click.wav" id="clickAudio" preload="auto"></audio>
+        <!--<audio src="audio/check.wav" id="checkAudio" preload="auto"></audio>-->
+        <audio src="audio/select.wav" id="selectAudio" preload="auto"></audio>
+        <div>
+          <div class="bn_box" id="bnBox">
+            <input
+              type="button"
+              name="offensivePlay"
+              id="tyroPlay"
+              value="新手水平"
+            />
+            <input
+              type="button"
+              name="offensivePlay"
+              id="superPlay"
+              value="高级水平"
+            />
+            <!-- <input
+              type="button"
+              name="button"
+              id=""
+              value="大师水平"
+              disabled
+            /> -->
+            <!--
+			<input type="button" name="offensivePlay" id="offensivePlay" value="先手开始" />
+			<input type="button" name="defensivePlay" id="defensivePlay" value="后手开始" />
+			-->
+            <input type="button" name="regret" id="regretBn" value="悔棋" />
+            <input
+              type="button"
+              name="billBn"
+              id="billBn"
+              value="棋谱"
+              class="bn_box"
+            />
+            <!-- <input type="button" name="stypeBn" id="stypeBn" value="换肤" /> -->
+          </div>
+        </div>
+      </div>
+      <div class="chess_right" id="chessRight">
+        <select name="billList" id="billList"></select>
+        <ol id="billBox" class="bill_box"></ol>
+      </div>
+      <div id="moveInfo" class="move_info"></div>
+    </div>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/play.js"></script>
+    <script type="text/javascript" src="js/AI.js"></script>
+    <script type="text/javascript" src="js/bill.js"></script>
+    <script type="text/javascript" src="js/gambit.js"></script>
+
+    <div style="display: none">
+      <script
+        src="http://s25.cnzz.com/stat.php?id=98945&web_id=98945"
+        language="JavaScript"
+      ></script>
+    </div>
+  </body>
+</html>
