@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>墨游&MoGame-百晓生：算学录</title>
+    <style>
+      :root {
+        --w: 50vmin;
+        --h: 75vmin;
+      }
+      body {
+        margin: 0;
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-image: url("../images/baixiaosheng/background.JPG");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+      }
+
+      #book {
+        height: var(--h);
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 1s;
+        perspective: 1600px;
+        transform-style: preserve-3d;
+      }
+      .book-cover {
+        height: var(--h);
+        width: var(--w);
+        position: absolute;
+        background-image: url("../images/baixiaosheng/hysx/0.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        transition: 1s;
+        transform-origin: left;
+        backface-visibility: visible;
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+      }
+      .book-page {
+        height: var(--h);
+        width: var(--w);
+        position: absolute;
+        z-index: 100;
+        transition: 1s;
+        transform-origin: 0px;
+        backface-visibility: visible;
+        transform-style: preserve-3d;
+      }
+
+      .page-front,
+      .page-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        backface-visibility: hidden;
+      }
+
+      .page-front {
+        transform: rotateY(0deg);
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
+
+      .page-back {
+        transform: rotateY(180deg);
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+      }
+
+      #control {
+        margin-top: 60px;
+        user-select: none;
+      }
+      #control button {
+        display: inline-block;
+        width: 45px;
+        height: 45px;
+        border: 0;
+        margin: 0px 15px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 50%;
+        background-color: rgba(63, 63, 63, 0.8);
+        outline: none;
+      }
+      #control button:active {
+        transform: scale(0.95);
+      }
+
+      /* 视频背景 */
+      #video-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover; /* 保持视频比例并填满屏幕 */
+        z-index: -1; /* 确保内容在上层 */
+      }
+      /* BGM */
+      audio {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 视频背景 -->
+    <video autoplay muted loop id="video-bg">
+      <source
+        src="../images/baixiaosheng/hysx/background.mp4"
+        type="video/mp4"
+      />
+      <!-- 备用提示 -->
+      您的浏览器不支持HTML5视频。
+    </video>
+    <!-- 背景音乐 -->
+    <audio
+      src="../images/baixiaosheng/hysx/BGM.MP3"
+      rel="external nofollow"
+      id="aud"
+      autoplay="autoplay"
+      controls="controls"
+      preload="auto"
+      class="audio"
+    ></audio>
+
+    <div id="book">
+      <div class="book-cover one-page"></div>
+
+      <!-- 每个页面包含正反两面 -->
+      <div class="book-page one-page">
+        <div class="page-front"></div>
+        <div class="page-back"></div>
+      </div>
+      <div class="book-page one-page">
+        <div class="page-front"></div>
+        <div class="page-back"></div>
+      </div>
+      <div class="book-page one-page">
+        <div class="page-front"></div>
+        <div class="page-back"></div>
+      </div>
+      <div class="book-page one-page">
+        <div class="page-front"></div>
+        <div class="page-back"></div>
+      </div>
+      <div class="book-page one-page">
+        <div class="page-front"></div>
+        <div class="page-back"></div>
+      </div>
+      <div class="book-page one-page">
+        <div class="page-front"></div>
+        <div class="page-back"></div>
+      </div>
+      <div class="book-page one-page">
+        <div class="page-front"></div>
+        <div class="page-back"></div>
+      </div>
+      <div class="book-page one-page">
+        <div class="page-front"></div>
+        <div class="page-back"></div>
+      </div>
+
+      <div class="book-cover one-page"></div>
+    </div>
+    <div id="control">
+      <button>&lt;</button>
+      <button>&gt;</button>
+    </div>
+
+    <script>
+      // 总页数 (现在是双面，所以实际内容页是2倍)
+      const PAGEPAIRS = 10; // 8个双面页+封面封底
+      // 当前页面编号
+      let pageNo = 0;
+
+      // 内容页
+      let pages = document.querySelectorAll(".book-page");
+      // 封面页
+      let cover = document.querySelectorAll(".book-cover");
+      // 按钮
+      let btn = document.querySelectorAll("#control button");
+      //
+      let book = document.querySelector("#book");
+      // 所有页
+      let allPages = document.querySelectorAll(".one-page");
+
+      function init() {
+        // 初始化内容页的图片
+        for (let index = 0; index < pages.length; index++) {
+          // 正面图片 (奇数页)
+          pages[index].querySelector(".page-front").style.backgroundImage =
+            "url('../images/baixiaosheng/hysx/" + (index * 2 + 1) + ".png')";
+          // 背面图片 (偶数页)
+          pages[index].querySelector(".page-back").style.backgroundImage =
+            "url('../images/baixiaosheng/hysx/" + (index * 2 + 2) + ".png')";
+
+          pages[index].style.zIndex = PAGEPAIRS - index;
+        }
+        cover[0].style.zIndex = PAGEPAIRS + 1;
+        cover[1].style.zIndex = 1;
+
+        // 默认页面为封面，左按钮无效
+        btn[0].style.backgroundColor = "rgba(110, 110, 110, 0.5)";
+        btn[0].style.color = "darkgray";
+        btn[0].disabled = true;
+
+        // 左翻页
+        btn[0].onclick = function () {
+          pageNo--;
+          // 如果当前是最后一页，并往前翻
+          if (PAGEPAIRS - 1 == pageNo) {
+            allPages[pageNo].style.transform = "rotateY(0deg)";
+            book.style.transform = "translateX(28vmin)";
+            allPages[pageNo].style.zIndex = PAGEPAIRS - pageNo + 1;
+            //右按钮状态改变
+            btn[1].style.backgroundColor = "rgba(63, 63, 63, 0.8)";
+            btn[1].style.color = "white";
+            btn[1].disabled = false;
+          } else {
+            // 当前页面翻转
+            allPages[pageNo].style.transform = "rotateY(0deg)";
+            // 更新z-inde，使得当前页面置顶
+            allPages[pageNo].style.zIndex = PAGEPAIRS - pageNo + 1;
+          }
+
+          if (0 == pageNo) {
+            btn[0].style.backgroundColor = "rgba(110, 110, 110, 0.5)";
+            btn[0].style.color = "darkgray";
+            btn[0].disabled = true;
+            book.style.transform = "translateX(0vmin)";
+          }
+        };
+
+        // 右翻页
+        btn[1].onclick = function () {
+          // 如果当前是封面，并往后翻
+          if (0 == pageNo) {
+            allPages[0].style.transform = "rotateY(-180deg)";
+            book.style.transform = "translateX(25vmin)";
+            //左按钮状态改变
+            btn[0].style.backgroundColor = "rgba(63, 63, 63, 0.8)";
+            btn[0].style.color = "white";
+            btn[0].disabled = false;
+          } else {
+            // 计算当前应该翻转的是哪个物理页面
+            allPages[pageNo].style.transform = "rotateY(-180deg)";
+            // 更新z-inde，使得当前页面置顶
+            allPages[pageNo].style.zIndex = 1000 + pageNo;
+          }
+
+          pageNo++;
+
+          if (PAGEPAIRS == pageNo) {
+            btn[1].style.backgroundColor = "rgba(110, 110, 110, 0.5)";
+            btn[1].style.color = "darkgray";
+            btn[1].disabled = true;
+            book.style.transform = "translateX(50vmin)";
+          }
+        };
+      }
+      init();
+    </script>
+
+    <!-- BGM -->
+    <script type="text/javascript">
+      window.onload = function () {
+        setInterval("toggleSound()", 1);
+      };
+
+      function toggleSound() {
+        var music = document.getElementById("aud");
+        if (music.paused) {
+          music.paused = false;
+          music.play();
+        }
+      }
+    </script>
+  </body>
+</html>
