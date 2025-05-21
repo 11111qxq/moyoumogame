@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>中式数字华容道</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#8C1515", // 深红色作为主色调，体现中式风格
+              secondary: "#D4AF37", // 金色作为辅助色
+              neutral: "#F5F5DC", // 米色作为背景色
+              dark: "#3C2A21", // 深棕色作为文字和边框颜色
+            },
+            fontFamily: {
+              chinese: [
+                '"Ma Shan Zheng"',
+                "cursive",
+                '"Noto Serif SC"',
+                "serif",
+              ],
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .puzzle-tile {
+          @apply flex items-center justify-center text-[clamp(1rem,3vw,2.5rem)] font-bold rounded-lg shadow-md transition-all duration-300 cursor-pointer aspect-square;
+        }
+        .puzzle-tile-empty {
+          @apply bg-transparent cursor-default shadow-none;
+        }
+        .puzzle-tile:hover:not(.puzzle-tile-empty) {
+          @apply transform scale-105 shadow-lg;
+        }
+        .btn-level {
+          @apply px-4 py-2 rounded-md font-chinese text-lg transition-all duration-300 transform hover:scale-105;
+        }
+        .btn-level.active {
+          @apply bg-primary text-white;
+        }
+        .game-container {
+          @apply bg-neutral/80 backdrop-blur-sm rounded-xl shadow-xl p-6 md:p-8 border-4 border-dark/20 max-w-4xl mx-auto w-full;
+        }
+        .puzzle-grid {
+          @apply grid gap-2 md:gap-3 mx-auto bg-dark/10 p-2 md:p-3 rounded-lg aspect-square max-w-md mx-auto;
+        }
+        .game-info {
+          @apply flex flex-col md:flex-row justify-between items-center mb-4 text-dark gap-4;
+        }
+        .game-stats {
+          @apply flex justify-center space-x-6 text-lg font-chinese;
+        }
+        .stat-item {
+          @apply flex items-center space-x-2;
+        }
+        .game-title {
+          @apply text-[clamp(1.8rem,5vw,3rem)] font-chinese text-primary text-center mb-6 relative;
+        }
+        .game-title::after {
+          @apply content-[''] absolute w-1/3 h-1 bg-secondary left-1/2 transform -translate-x-1/2 bottom-[-8px] rounded-full;
+        }
+        .level-selector {
+          @apply flex flex-wrap justify-center gap-3 mb-6;
+        }
+        .btn-reset {
+          @apply px-4 py-2 bg-primary text-white rounded-md font-chinese text-lg transition-all duration-300 hover:bg-primary/90 transform hover:scale-105;
+        }
+        .modal {
+          @apply fixed inset-0 bg-dark/70 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300;
+        }
+        .modal.active {
+          @apply opacity-100 pointer-events-auto;
+        }
+        .modal-content {
+          @apply bg-neutral rounded-xl p-6 max-w-md w-full mx-4 transform transition-transform duration-300 scale-95;
+        }
+        .modal.active .modal-content {
+          @apply scale-100;
+        }
+        .modal-title {
+          @apply text-2xl font-chinese text-primary mb-4;
+        }
+        .modal-body {
+          @apply text-lg mb-6;
+        }
+        .btn-modal {
+          @apply px-4 py-2 bg-primary text-white rounded-md font-chinese transition-all duration-300 hover:bg-primary/90;
+        }
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="bg-cover bg-center min-h-screen flex flex-col items-center justify-center p-4 font-chinese"
+    style="background-image: url('../images/yijie/background.JPG')"
+  >
+    <div class="game-container">
+      <h1 class="game-title">数字华容道</h1>
+
+      <div class="level-selector">
+        <button id="easy" class="btn-level active" data-size="3">
+          初级 (3×3)
+        </button>
+        <button id="medium" class="btn-level" data-size="4">中级 (4×4)</button>
+        <button id="hard" class="btn-level" data-size="5">高级 (5×5)</button>
+      </div>
+
+      <div class="game-info">
+        <div class="game-stats">
+          <div class="stat-item">
+            <i class="fa-solid fa-clock text-primary"></i>
+            <span id="timer">00:00</span>
+          </div>
+          <div class="stat-item">
+            <i class="fa-solid fa-arrows-turn-right text-primary"></i>
+            <span id="moves">0</span>
+          </div>
+        </div>
+        <button id="reset" class="btn-reset">
+          <i class="fa-solid fa-refresh mr-2"></i>重新开始
+        </button>
+      </div>
+
+      <div id="puzzle-container" class="relative mx-auto">
+        <!-- 拼图将通过JavaScript动态生成 -->
+      </div>
+    </div>
+
+    <!-- 胜利弹窗 -->
+    <div id="victory-modal" class="modal">
+      <div class="modal-content text-center">
+        <h2 class="modal-title">恭喜你!</h2>
+        <div class="modal-body">
+          <p>你已成功完成华容道!</p>
+          <p class="mt-2">用时: <span id="final-time">00:00</span></p>
+          <p class="mt-1">步数: <span id="final-moves">0</span></p>
+        </div>
+        <button id="play-again" class="btn-modal">再来一局</button>
+      </div>
+    </div>
+
+    <script>
+      // 游戏状态
+      let puzzleSize = 3; // 默认3x3
+      let puzzle = [];
+      let emptyPos = { row: puzzleSize - 1, col: puzzleSize - 1 };
+      let moves = 0;
+      let timer = 0;
+      let timerInterval;
+      let isPlaying = false;
+      let startTime;
+
+      // DOM元素
+      const puzzleContainer = document.getElementById("puzzle-container");
+      const movesElement = document.getElementById("moves");
+      const timerElement = document.getElementById("timer");
+      const resetButton = document.getElementById("reset");
+      const victoryModal = document.getElementById("victory-modal");
+      const finalTimeElement = document.getElementById("final-time");
+      const finalMovesElement = document.getElementById("final-moves");
+      const playAgainButton = document.getElementById("play-again");
+
+      // 难度按钮
+      document
+        .getElementById("easy")
+        .addEventListener("click", () => setDifficulty(3));
+      document
+        .getElementById("medium")
+        .addEventListener("click", () => setDifficulty(4));
+      document
+        .getElementById("hard")
+        .addEventListener("click", () => setDifficulty(5));
+
+      // 设置难度
+      function setDifficulty(size) {
+        if (puzzleSize !== size) {
+          puzzleSize = size;
+          emptyPos = { row: puzzleSize - 1, col: puzzleSize - 1 };
+          document
+            .querySelectorAll(".btn-level")
+            .forEach((btn) => btn.classList.remove("active"));
+          document
+            .querySelector(`[data-size="${size}"]`)
+            .classList.add("active");
+          initGame();
+        }
+      }
+
+      // 初始化游戏
+      function initGame() {
+        stopGame();
+        createPuzzle();
+        renderPuzzle();
+        moves = 0;
+        movesElement.textContent = moves;
+        timerElement.textContent = "00:00";
+      }
+
+      // 创建拼图
+      function createPuzzle() {
+        // 生成有序数组
+        const totalTiles = puzzleSize * puzzleSize;
+        puzzle = Array(totalTiles - 1)
+          .fill()
+          .map((_, i) => i + 1);
+        puzzle.push(0); // 0表示空白格
+
+        // 打乱数组，确保有解
+        do {
+          shufflePuzzle();
+        } while (!isSolvable());
+      }
+
+      // 打乱拼图
+      function shufflePuzzle() {
+        // Fisher-Yates 洗牌算法
+        for (let i = puzzle.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [puzzle[i], puzzle[j]] = [puzzle[j], puzzle[i]];
+        }
+
+        // 找到空白格位置
+        const emptyIndex = puzzle.indexOf(0);
+        emptyPos.row = Math.floor(emptyIndex / puzzleSize);
+        emptyPos.col = emptyIndex % puzzleSize;
+      }
+
+      // 检查是否有解
+      function isSolvable() {
+        // 计算逆序数
+        let inversions = 0;
+        const puzzleWithoutEmpty = puzzle.filter((num) => num !== 0);
+
+        for (let i = 0; i < puzzleWithoutEmpty.length; i++) {
+          for (let j = i + 1; j < puzzleWithoutEmpty.length; j++) {
+            if (puzzleWithoutEmpty[i] > puzzleWithoutEmpty[j]) {
+              inversions++;
+            }
+          }
+        }
+
+        // 根据拼图大小和空白格位置判断是否有解
+        if (puzzleSize % 2 === 1) {
+          // 奇数大小的拼图：逆序数为偶数时有解
+          return inversions % 2 === 0;
+        } else {
+          // 偶数大小的拼图：空白格所在行数为偶数且逆序数为奇数，或者空白格所在行数为奇数且逆序数为偶数时有解
+          const emptyRowFromBottom = puzzleSize - emptyPos.row;
+          return (
+            (emptyRowFromBottom % 2 === 0 && inversions % 2 === 1) ||
+            (emptyRowFromBottom % 2 === 1 && inversions % 2 === 0)
+          );
+        }
+      }
+
+      // 渲染拼图
+      function renderPuzzle() {
+        puzzleContainer.innerHTML = "";
+
+        // 设置网格样式
+        const gridTemplate = `repeat(${puzzleSize}, 1fr)`;
+        puzzleContainer.style.gridTemplateColumns = gridTemplate;
+        puzzleContainer.style.gridTemplateRows = gridTemplate;
+        puzzleContainer.className = `puzzle-grid`;
+
+        // 创建拼图格子
+        for (let i = 0; i < puzzleSize; i++) {
+          for (let j = 0; j < puzzleSize; j++) {
+            const index = i * puzzleSize + j;
+            const tile = document.createElement("div");
+
+            if (puzzle[index] === 0) {
+              tile.className = "puzzle-tile puzzle-tile-empty";
+            } else {
+              tile.className = "puzzle-tile bg-primary text-white";
+              tile.textContent = puzzle[index];
+              tile.dataset.row = i;
+              tile.dataset.col = j;
+              tile.addEventListener("click", () => moveTile(i, j));
+            }
+
+            puzzleContainer.appendChild(tile);
+          }
+        }
+      }
+
+      // 移动拼图
+      function moveTile(row, col) {
+        // 检查是否可以移动
+        if (
+          (row === emptyPos.row && Math.abs(col - emptyPos.col) === 1) ||
+          (col === emptyPos.col && Math.abs(row - emptyPos.row) === 1)
+        ) {
+          // 开始游戏计时器
+          if (!isPlaying) {
+            startGame();
+          }
+
+          // 计算索引
+          const tileIndex = row * puzzleSize + col;
+          const emptyIndex = emptyPos.row * puzzleSize + emptyPos.col;
+
+          // 交换位置
+          [puzzle[tileIndex], puzzle[emptyIndex]] = [
+            puzzle[emptyIndex],
+            puzzle[tileIndex],
+          ];
+
+          // 更新空白格位置
+          emptyPos.row = row;
+          emptyPos.col = col;
+
+          // 更新移动次数
+          moves++;
+          movesElement.textContent = moves;
+
+          // 重新渲染拼图
+          renderPuzzle();
+
+          // 检查是否完成
+          if (isCompleted()) {
+            stopGame();
+            showVictoryModal();
+          }
+        }
+      }
+
+      // 检查是否完成
+      function isCompleted() {
+        for (let i = 0; i < puzzle.length - 1; i++) {
+          if (puzzle[i] !== i + 1) {
+            return false;
+          }
+        }
+        return puzzle[puzzle.length - 1] === 0;
+      }
+
+      // 开始游戏
+      function startGame() {
+        isPlaying = true;
+        startTime = new Date();
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+
+      // 停止游戏
+      function stopGame() {
+        isPlaying = false;
+        clearInterval(timerInterval);
+      }
+
+      // 更新计时器
+      function updateTimer() {
+        const currentTime = new Date();
+        const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+        const minutes = Math.floor(elapsedTime / 60)
+          .toString()
+          .padStart(2, "0");
+        const seconds = (elapsedTime % 60).toString().padStart(2, "0");
+        timerElement.textContent = `${minutes}:${seconds}`;
+      }
+
+      // 显示胜利弹窗
+      function showVictoryModal() {
+        finalTimeElement.textContent = timerElement.textContent;
+        finalMovesElement.textContent = moves;
+        victoryModal.classList.add("active");
+      }
+
+      // 隐藏胜利弹窗
+      function hideVictoryModal() {
+        victoryModal.classList.remove("active");
+      }
+
+      // 事件监听
+      resetButton.addEventListener("click", initGame);
+      playAgainButton.addEventListener("click", () => {
+        hideVictoryModal();
+        initGame();
+      });
+
+      // 键盘控制
+      document.addEventListener("keydown", (e) => {
+        if (!isPlaying) return;
+
+        const { row, col } = emptyPos;
+
+        switch (e.key) {
+          case "ArrowUp":
+            if (row < puzzleSize - 1) moveTile(row + 1, col);
+            break;
+          case "ArrowDown":
+            if (row > 0) moveTile(row - 1, col);
+            break;
+          case "ArrowLeft":
+            if (col < puzzleSize - 1) moveTile(row, col + 1);
+            break;
+          case "ArrowRight":
+            if (col > 0) moveTile(row, col - 1);
+            break;
+        }
+      });
+
+      // 初始化游戏
+      initGame();
+    </script>
+  </body>
+</html>
