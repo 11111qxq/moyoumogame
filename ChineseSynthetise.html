@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合成茶道 - 中国传统棋具茶具合成游戏</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #E8DFD8 0%, #F5E6D3 100%);
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        #game-container {
+            position: relative;
+            width: 390px;
+            height: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAEsGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS41LjAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iCiAgICB4bWxuczpleGlmPSJodHRwOi8vbnMuYWRvYmUuY29tL2V4aWYvMS4wLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgdGlmZjpJbWFnZUxlbmd0aD0iNTAiCiAgIHRpZmY6SW1hZ2VXaWR0aD0iNTAiCiAgIHRpZmY6UmVzb2x1dGlvblVuaXQ9IjIiCiAgIHRpZmY6WFJlc29sdXRpb249IjcyLjAiCiAgIHRpZmY6WVJlc29sdXRpb249IjcyLjAiCiAgIGV4aWY6UGl4ZWxYRGltZW5zaW9uPSI1MCIKICAgZXhpZjpQaXhlbFlEaW1lbnNpb249IjUwIgogICBleGlmOkNvbG9yU3BhY2U9IjEiCiAgIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiCiAgIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIKICAgeG1wOk1vZGlmeURhdGU9IjIwMjQtMDEtMjNUMjI6NDE6NDUrMDg6MDAiCiAgIHhtcDpNZXRhZGF0YURhdGU9IjIwMjQtMDEtMjNUMjI6NDE6NDUrMDg6MDAiPgogICA8eG1wTU06SGlzdG9yeT4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJwcm9kdWNlZCIKICAgICAgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWZmaW5pdHkgRGVzaWduZXIgMS4xMC42IgogICAgICBzdEV2dDp3aGVuPSIyMDI0LTAxLTIzVDIyOjQxOjQ1KzA4OjAwIi8+CiAgICA8L3JkZjpTZXE+CiAgIDwveG1wTU06SGlzdG9yeT4KICA8L3JkZjpEZXNjcmlwdGlvbj4KIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+Cjw/eHBhY2tldCBlbmQ9InIiPz7pYWVhAAAABHNCSVQICAgIfAhkiAAAAnpJREFUaIHtmk1u1EAQhb/yDyxYcADOwA7BCQKLXIENWzgHF+AQWbDhBvmBBQKJQ8CCBRLZZBYzluVxu7vabXfPyJNXUqTp6q5X/V7VjO2E3nsucceYzR3AUKyN7AprI7vCYm4HhmJtZFcYZOTg4IBer8fR0RFLS0tzxzUZg4wcHx/T7/c5PDycO67JuLYRay1KKZxzWGvJsgzv/dxBjoXeQXjvcc6RZRkASilSSlhrWSwWJJcLtNYopQCIMUoppZQyxgCgtZ47ntGIMUYrpVBKEWMEIMZICAEAYwzOOWKMxBiJMVpr0VoTQiDPc0II3Nzc4L3n9PQUgMvLS7z3GGNwzmGMQSmF1hqlFN57QghYa1FKYa3l+vqa8/NzAC4uLri6umJ/f5+dnR2ur6+5vb0lz3OyLCPGSJ7n5HmOtZY8z/HeE0LA2vBXvbm5AaDX6wGQUiKlhPce7z0xxv8HvPeEEEgpAWCMIaVEjJGUEs65hTHGxxgJIZBSQmuN1poYI1mWYYxZGGMIIeC9xzmHMQbnHCEErLV3RqqqIqVEVVV0Oh0Ams0mjUaDsixpt9u02200mpRlSVmWtFotOp0OnU6HoihYX1+n2WxSVRVVVdHr9eh2u+zv73N2dsbm5iaNRoOyLKmqirIsaTQatNttWq0WRVGwtrZGp9OhLEuqqmJ3d5eDgwO2t7dJKVFVFWVZopSiKAo6nQ7tdhtjDGVZsrW1RVEUVFXFysoKS0tLrK6u0u126Xa7LC8vU5YlKysrNJtNiqKg0+mwsbFBURSUZcnKygqtVouiKGg2m3S7XVqtFkVRsLa2RqfToSxLyrJkc3OTfr/P1tYWjx8+4fTLZ56/ePn0O0ebican37/w9t0HPn76zLv3H/kDvhP9DBi8ddMAAAAASUVORK5CYII=');
+        }
+
+        canvas {
+            border: 4px solid #8B4513;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        .game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(139, 69, 19, 0.9), transparent);
+            color: #fff;
+            z-index: 1;
+            backdrop-filter: blur(5px);
+        }
+
+        #score {
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        #next-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        #next-label {
+            font-size: 18px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        #next-preview {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        #next-preview:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game-container">
+        <div class="game-ui">
+            <div id="score">分数: <span id="score-value">0</span></div>
+            <div id="next-container">
+                <span id="next-label">下一个:</span>
+                <div id="next-preview"></div>
+            </div>
+        </div>
+        <canvas id="game-canvas"></canvas>
+    </div>
+    <script>
+        // 游戏配置
+        const GAME_WIDTH = 390;
+        const GAME_HEIGHT = 600;
+        const GAME_OVER_LINE = 150; // 游戏结束判定线高度
+        const GAME_ITEMS = [
+            { name: '五子', radius: 15, color: '#8D6E63', score: 1, probability: 0.6 },     // 深木色
+            { name: '跳棋', radius: 22, color: '#FF7043', score: 2, probability: 0.2 },     // 橙红色
+            { name: '军棋', radius: 28, color: '#66BB6A', score: 4, probability: 0.1 },     // 翠绿色
+            { name: '象棋', radius: 34, color: '#FDD835', score: 8, probability: 0.06 },    // 金黄色
+            { name: '玉石', radius: 40, color: '#81C784', score: 16, probability: 0.03 },   // 玉石绿
+            { name: '茶杯', radius: 46, color: '#4FC3F7', score: 32, probability: 0.007 },  // 天蓝色
+            { name: '砚台', radius: 52, color: '#7E57C2', score: 64, probability: 0.002 },  // 优雅紫
+            { name: '盘子', radius: 58, color: '#EC407A', score: 128, probability: 0.0007 }, // 玫瑰红
+            { name: '茶壶', radius: 65, color: '#26A69A', score: 256, probability: 0.0003 } // 青瓷色
+        ];
+
+        // Matter.js 模块别名
+        const { Engine, Render, World, Bodies, Body, Events, Common } = Matter;
+
+        // 游戏类
+        class Game {
+            constructor() {
+                this.canvas = document.getElementById('game-canvas');
+                this.canvas.width = GAME_WIDTH;
+                this.canvas.height = GAME_HEIGHT;
+                this.score = 0;
+                this.scoreElement = document.getElementById('score-value');
+                this.nextPreview = document.getElementById('next-preview');
+                this.nextItem = this.getRandomItem();
+                this.updateNextPreview();
+                this.mergeInProgress = new Set(); // 用于跟踪正在合成的物体
+
+                // 创建物理引擎
+                this.engine = Engine.create();
+                this.engine.world.gravity.y = 0.8; // 降低重力以使游戏更容易控制
+
+                // 创建渲染器
+                this.render = Render.create({
+                    canvas: this.canvas,
+                    engine: this.engine,
+                    options: {
+                        width: GAME_WIDTH,
+                        height: GAME_HEIGHT,
+                        wireframes: false,
+                        background: 'transparent'
+                    }
+                });
+
+                // 创建边界
+                this.createBounds();
+
+                // 开始游戏循环
+                this.setupEvents();
+                Engine.run(this.engine);
+                Render.run(this.render);
+
+                // 添加游戏结束检测
+                this.checkGameOver();
+
+                // 添加游戏结束判定线
+                this.addGameOverLine();
+            }
+
+            // 添加游戏结束判定线（半透明）
+            addGameOverLine() {
+                const lineOptions = {
+                    isStatic: true,
+                    render: {
+                        fillStyle: 'rgba(255, 0, 0, 0.2)',
+                        strokeStyle: 'rgba(255, 0, 0, 0.4)',
+                        lineWidth: 1
+                    },
+                    isSensor: true // 使其不参与物理碰撞
+                };
+                const line = Bodies.rectangle(GAME_WIDTH / 2, GAME_OVER_LINE, GAME_WIDTH - 120, 2, lineOptions);
+                World.add(this.engine.world, line);
+            }
+
+            // 根据概率获取随机物品
+            getRandomItem() {
+                const rand = Math.random();
+                let probabilitySum = 0;
+
+                for (const item of GAME_ITEMS) {
+                    probabilitySum += item.probability;
+                    if (rand <= probabilitySum) {
+                        return item;
+                    }
+                }
+
+                return GAME_ITEMS[0]; // 默认返回最小的物品
+            }
+
+            createBounds() {
+                const wallOptions = {
+                    isStatic: true,
+                    render: {
+                        fillStyle: '#5D4037', // 更深的木色边框
+                        opacity: 0.7
+                    }
+                };
+
+                // 创建边界墙
+                World.add(this.engine.world, [
+                    Bodies.rectangle(GAME_WIDTH / 2, GAME_HEIGHT, GAME_WIDTH, 60, wallOptions), // 底部
+                    Bodies.rectangle(0, GAME_HEIGHT / 2, 60, GAME_HEIGHT, wallOptions), // 左边
+                    Bodies.rectangle(GAME_WIDTH, GAME_HEIGHT / 2, 60, GAME_HEIGHT, wallOptions) // 右边
+                ]);
+            }
+
+            updateNextPreview() {
+                this.nextPreview.style.backgroundColor = this.nextItem.color;
+                this.nextPreview.textContent = this.nextItem.name;
+                this.nextPreview.style.fontSize = `${Math.max(12, this.nextItem.radius * 0.8)}px`;
+                // 添加发光效果
+                this.nextPreview.style.boxShadow = `0 0 10px ${this.nextItem.color}`;
+            }
+
+            createGameItem(type, x, y) {
+                const item = Bodies.circle(x, y, type.radius, {
+                    restitution: 0.3, // 降低弹性
+                    friction: 0.05,   // 增加摩擦力
+                    density: 0.001,   // 降低密度使物体更轻
+                    render: {
+                        fillStyle: type.color,
+                        strokeStyle: '#000',
+                        lineWidth: 1.5
+                    },
+                    itemType: type,
+                    collisionFilter: {
+                        group: 0,
+                        category: 0x0001,
+                        mask: 0xFFFFFFFF
+                    }
+                });
+
+                // 添加物品名称
+                const label = {
+                    content: type.name,
+                    color: '#FFF',
+                    size: type.radius * 0.8,
+                    family: 'Microsoft YaHei',
+                    strokeStyle: '#000',
+                    lineWidth: 2
+                };
+                item.render.text = label;
+
+                World.add(this.engine.world, item);
+                return item;
+            }
+
+            checkGameOver() {
+                setInterval(() => {
+                    const bodies = Matter.Composite.allBodies(this.engine.world);
+                    for (let body of bodies) {
+                        // 只检查非静态的游戏物品
+                        if (body.itemType && !body.isStatic) {
+                            // 检查物体是否已经稳定（速度很小）且位置高于判定线
+                            const isStable = Math.abs(body.velocity.y) < 0.1;
+                            if (isStable && body.position.y < GAME_OVER_LINE) {
+                                // 游戏结束逻辑
+                                alert(`游戏结束！\n最终得分: ${this.score}\n继续努力吧！`);
+                                window.location.reload();
+                                return;
+                            }
+                        }
+                    }
+                }, 1000);
+            }
+
+            setupEvents() {
+                let lastDropTime = 0;
+                const dropCooldown = 500; // 500ms冷却时间
+
+                // 点击事件
+                this.canvas.addEventListener('click', (e) => {
+                    const currentTime = Date.now();
+                    if (currentTime - lastDropTime < dropCooldown) {
+                        return; // 如果在冷却时间内，忽略点击
+                    }
+                    lastDropTime = currentTime;
+
+                    const rect = this.canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+
+                    // 创建当前预览的物品
+                    this.createGameItem(this.nextItem, x, 50);
+
+                    // 获取下一个随机物品
+                    this.nextItem = this.getRandomItem();
+                    this.updateNextPreview();
+                });
+
+                // 碰撞检测
+                Events.on(this.engine, 'collisionStart', (event) => {
+                    event.pairs.forEach((pair) => {
+                        const bodyA = pair.bodyA;
+                        const bodyB = pair.bodyB;
+
+                        // 检查是否都是游戏物品且类型相同
+                        if (bodyA.itemType && bodyB.itemType &&
+                            bodyA.itemType.name === bodyB.itemType.name &&
+                            !this.mergeInProgress.has(bodyA.id) &&
+                            !this.mergeInProgress.has(bodyB.id)) {
+
+                            const index = GAME_ITEMS.findIndex(item => item.name === bodyA.itemType.name);
+                            if (index < GAME_ITEMS.length - 1) {
+                                // 标记这两个物体正在合成中
+                                this.mergeInProgress.add(bodyA.id);
+                                this.mergeInProgress.add(bodyB.id);
+
+                                // 合成新物品
+                                const newType = GAME_ITEMS[index + 1];
+                                const pos = {
+                                    x: (bodyA.position.x + bodyB.position.x) / 2,
+                                    y: (bodyA.position.y + bodyB.position.y) / 2
+                                };
+
+                                // 延迟移除旧物品和创建新物品，确保碰撞效果显示
+                                setTimeout(() => {
+                                    // 移除旧物品
+                                    World.remove(this.engine.world, bodyA);
+                                    World.remove(this.engine.world, bodyB);
+
+                                    // 创建新物品
+                                    const newItem = this.createGameItem(newType, pos.x, pos.y);
+
+                                    // 更新分数并添加动画效果
+                                    this.score += newType.score;
+                                    this.scoreElement.textContent = this.score;
+                                    this.scoreElement.style.transform = 'scale(1.2)';
+                                    setTimeout(() => {
+                                        this.scoreElement.style.transform = 'scale(1)';
+                                    }, 200);
+
+                                    // 从正在合成集合中移除
+                                    this.mergeInProgress.delete(bodyA.id);
+                                    this.mergeInProgress.delete(bodyB.id);
+                                }, 100);
+                            }
+                        }
+                    });
+                });
+            }
+        }
+
+        // 启动游戏
+        window.onload = () => new Game();
+    </script>
+</body>
+
+</html>
